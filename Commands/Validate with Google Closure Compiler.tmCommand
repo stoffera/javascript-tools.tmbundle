@@ -9,7 +9,7 @@
 source "$TM_SUPPORT_PATH/lib/bash_init.sh" # might not be necessary
 . "$TM_SUPPORT_PATH/lib/webpreview.sh"
 html_header "Validate Javascript"
-ruby "$TM_BUNDLE_SUPPORT/bin/lint-gcc.rb"
+bash "$TM_BUNDLE_SUPPORT/bin/closure_compile.sh"
 html_footer
 </string>
 	<key>fallbackInput</key>
