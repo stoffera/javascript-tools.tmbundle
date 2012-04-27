@@ -1,3 +1,11 @@
+<h1>About this fork of JavaScript Tools for TextMate</h1>
+This fork is intended to be used by developers using Google Closure Compiler along with the Closure framework.
+
+The Closure Compiler is strict on defined variables and namespaces, with means it must compile all dependencies of a file before the current file can be compiled. The calcdeps.py script in the closure framework provides a dependency chain for the closure compiler.
+
+This fork of Javascript Tools, calls the calcdeps.py script and compiles your full JS application with the compiler. You MUST setup a environment variable in TextMate called *CLOSURE_PATH* pointing to the location of your closure library.
+
+
 *How to install*
 
 1. <h2>[Get with **GitHub for Mac**](http://mac.github.com/ "GitHub for Mac")</h2>
