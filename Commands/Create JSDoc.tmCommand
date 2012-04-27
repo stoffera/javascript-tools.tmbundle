@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env bash -l
+source "$TM_SUPPORT_PATH/lib/bash_init.sh" # might not be necessary
+. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Compiling JSDoc"
+echo "&lt;pre&gt;"
+echo "Compiling, please wait..."
+java -jar "$TM_BUNDLE_SUPPORT/bin/jsdoc-toolkit/jsrun.jar" "$TM_BUNDLE_SUPPORT/bin/jsdoc-toolkit/app/run.js" -t="$TM_BUNDLE_SUPPORT/bin/jsdoc-toolkit/templates/jsdoc" -d="/tmp/javascript-tools-textmate/" "$TM_DIRECTORY"
+echo "&lt;/pre&gt;"
+open /tmp/javascript-tools-textmate/index.html
+html_footer
+</string>
+	<key>fallbackInput</key>
+	<string>scope</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^D</string>
+	<key>name</key>
+	<string>Document with JSDoc</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>F5397F11-249C-4E0D-9F82-573C76AC6DD2</string>
+</dict>
+</plist>

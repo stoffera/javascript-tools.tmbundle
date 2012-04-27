@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env bash -l
+source "$TM_SUPPORT_PATH/lib/bash_init.sh" # might not be necessary
+. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Google Closure Compiler - Errors only"
+bash "$TM_BUNDLE_SUPPORT/bin/closure_compile.sh" -onlyErrors
+html_footer
+</string>
+	<key>fallbackInput</key>
+	<string>scope</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^V</string>
+	<key>name</key>
+	<string>Validate with Closure Compiler Errors Only </string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.js -entity.name.tag.script.html</string>
+	<key>uuid</key>
+	<string>506CE81A-4F09-4A37-AA77-8A69E059A826</string>
+</dict>
+</plist>
