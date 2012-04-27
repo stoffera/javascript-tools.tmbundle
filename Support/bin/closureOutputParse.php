@@ -14,11 +14,10 @@ ul {
 	background-color: #CC8080;
 }
 </style>";
-
 echo "<ul>";
 
 for ($i=0; $i<count($messages); $i++) {
-	if (matchWarning($messages[$i],$messages, $i)) continue;
+	if ($argc == 2 && matchWarning($messages[$i],$messages, $i)) continue;
 	if (matchError($messages[$i], $messages, $i)) continue;
 }
 
