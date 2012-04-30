@@ -1,6 +1,9 @@
 <?
+
 $input = file_get_contents($argv[1]);
 $messages = explode("\n",$input);
+$showWarnings = $argc < 3;
+
 echo "<style>
 ul {
 	list-style: none;
@@ -14,39 +17,62 @@ ul {
 	background-color: #CC8080;
 }
 </style>";
-echo "<ul>";
 
-for ($i=0; $i<count($messages); $i++) {
-	if ($argc == 2 && matchWarning($messages[$i],$messages, $i)) continue;
-	if (matchError($messages[$i], $messages, $i)) continue;
+$errors = $warnings = array();
+
+for ($i = 0; $i < count($messages); $i++) {
+	if ($showWarnings) {
+		$info = match($messages, $i, 'WARNING');
+		if (!empty($info)) {
+			$warnings[] = $info;
+			continue;
+		}
+	} 
+	$info = match($messages, $i, 'ERROR');
+	if (!empty($info)) {
+		$errors[] = $info;
+		continue;
+	}
 }
 
+echo "<ul>";
+if (!empty($errors)) {
+	foreach ($errors as $info) {
+		print outputLi($info,'ERROR');
+	}
+}
+if (!empty($warnings)) {
+	foreach ($warnings as $info) {
+		print outputLi($info,'WARNING');
+	}
+}
 echo "</ul>";
 
-function matchWarning($text,&$messages,&$i) {
-	if (preg_match("/^([\/\s\w]+)\/(\w+\.js):(\d+): WARNING - ([\w\s]+)/",$text,$matches)) {
-		$path = $matches[1];
-		$fil = $matches[2];
-		$linje = $matches[3];
-		$msg = $matches[4];
-		echo "<li class='warning'><a href='txmt://open?url=file://$path/$fil&line=$linje'>WARNING: $fil - $linje</a> <p>$msg</p>\n";
-		echo "<small><pre>".$messages[$i+1]."\n".$messages[$i+2]."</pre></small></li>";
-		$i += 2;
+function match(&$messages, &$i, $type) {
+	$info = array();
+	if (preg_match("/^([\/\s\w]+)\/(\w+\.js):(\d+): ".$type." - ([\w\s]+)/", $messages[$i], $matches)) {
+		$info = array(
+			'path' => $matches[1],
+			'file' => $matches[2],
+			'lineNo' => $matches[3],
+			'msg' => $matches[4],
+			'lineText' => $messages[$i++],
+			'marker' => $messages[$i++]
+		);
 	}
-	else return false;
+	return $info;
 }
 
-function matchError($text,&$messages,&$i) {
-	if (preg_match("/^([\/\s\w]+)\/(\w+\.js):(\d+): ERROR - ([\w\s\"\.]+)/",$text,$matches)) {
-		$path = $matches[1];
-		$fil = $matches[2];
-		$linje = $matches[3];
-		$msg = $matches[4];
-		echo "<li class='error'><a href='txmt://open?url=file://$path/$fil&line=$linje'>ERROR: $fil - $linje</a> <p>$msg</p>\n";
-		echo "<small><pre>".$messages[$i+1]."\n".$messages[$i+2]."</pre></small></li>";
-		$i += 2;
-	}
-	else return false;
+function outputLi($m, $type) {
+	$str  = '<li class="' . strtolower($type) . '">';
+		$str .= '<a href="txmt://open?url=file://' . $m['path'] . '/' . $m['file'] . '&line=' . $m['lineNo'] . '">';
+			$str .= $type . ': ' . $m['file'] . ' - ' . $m['lineNo'];
+		$str .= '</a>';
+		$str .= '<p>' . $m['msg'] . '</p>';
+		$str .= '<small><pre>';
+			$str .= $m['lineText'] . "\n" . $m['marker'];
+		$str .= '</pre></small>';
+	$str .= '</li>';
+	return $str;
 }
-
 ?>

@@ -27,6 +27,8 @@ python "$CLOSURE/bin/calcdeps.py" \
 -f --jscomp_warning=checkTypes \
 -f --jscomp_warning=accessControls \
 --output_file="$CLOSURE/goog/compiled.js" 2>&1 | cat > "$CLOSURE/goog/compile-bugs.txt"
+tail -n2 "$CLOSURE/goog/compile-bugs.txt"
+echo
 echo "Done"
 echo "</pre>"
 php "$TM_BUNDLE_SUPPORT/bin/closureOutputParse.php" "$CLOSURE/goog/compile-bugs.txt" $1
