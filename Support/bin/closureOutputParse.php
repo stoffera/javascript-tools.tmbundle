@@ -24,7 +24,7 @@ for ($i=0; $i<count($messages); $i++) {
 echo "</ul>";
 
 function matchWarning($text,&$messages,&$i) {
-	if (preg_match("/^([\/\w+]+)\/(\w+\.js):(\d+): WARNING - ([\w\s]+)/",$text,$matches)) {
+	if (preg_match("/^([\/\s\w]+)\/(\w+\.js):(\d+): WARNING - ([\w\s]+)/",$text,$matches)) {
 		$path = $matches[1];
 		$fil = $matches[2];
 		$linje = $matches[3];
@@ -37,7 +37,7 @@ function matchWarning($text,&$messages,&$i) {
 }
 
 function matchError($text,&$messages,&$i) {
-	if (preg_match("/^([\/\w+]+)\/(\w+\.js):(\d+): ERROR - ([\w\s\"\.]+)/",$text,$matches)) {
+	if (preg_match("/^([\/\s\w]+)\/(\w+\.js):(\d+): ERROR - ([\w\s\"\.]+)/",$text,$matches)) {
 		$path = $matches[1];
 		$fil = $matches[2];
 		$linje = $matches[3];

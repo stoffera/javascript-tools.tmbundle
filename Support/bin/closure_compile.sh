@@ -1,13 +1,13 @@
 #!/bin/bash
-CLOSURE=$CLOSURE_PATH
+CLOSURE="$CLOSURE_PATH"
 COMPILER="$TM_BUNDLE_SUPPORT/bin/compiler.jar"
-if [ -z $CLOSURE ]
+if [ -z "$CLOSURE" ]
 	then
 	echo "<div style='background-color: #B36666;border: 1px solid black;'><h1 style='color: red;'>Error:</h1><h2>You must define the CLOSURE_PATH environment variable in TextMate.</h2><p>See TextMate menu -> Preferences -> Advanced -> Shell Variables.</p></div>"
 fi
 echo "<pre>"
 echo "Cleaning up..."
-find "$CLOSURE/goog" -iname '._*' | xargs rm
+find "$CLOSURE/goog" -iname '._*' | xargs -I {} rm "{}"
 echo "Calculating dependencies and compiling..."
 python "$CLOSURE/bin/calcdeps.py" \
 -e "$CLOSURE/goog/.AppleDouble" -e "$CLOSURE/goog/*/.AppleDouble" -e "$CLOSURE/goog/*/*/.AppleDouble" \
