@@ -51,7 +51,6 @@ echo "</ul>";
 
 function match(&$messages, &$i, $type) {
 	$info = array();
-	if (preg_match("/^([\/\s\w]+)\/(\w+\.js):(\d+): ".$type." - ([\w\s]+)/", $messages[$i], $matches)) {
 	
 	// Check if output matches regex
 	if (preg_match("/^([\/\s\w]+)\/(\w+\.js):(\d+): ".$type." - (.+)$/", $messages[$i], $matches)) {
