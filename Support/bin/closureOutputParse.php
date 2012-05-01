@@ -54,13 +54,27 @@ function match(&$messages, &$i, $type) {
 	
 	// Check if output matches regex
 	if (preg_match("/^([\/\s\w]+)\/(\w+\.js):(\d+): ".$type." - (.+)$/", $messages[$i], $matches)) {
+		
+		// The errorText is all the lines until next empty line
+		$errorText = array();;
+		while ($messages[$i++] != "") {
+			$errorText[] = $messages[$i];
+		}
 		$info = array(
+			// Path to the file
 			'path' => $matches[1],
+			
+			// File name
 			'file' => $matches[2],
+			
+			// Line number
 			'lineNo' => $matches[3],
+			
+			// Error message from the compiler
 			'msg' => $matches[4],
-			'lineText' => $messages[$i++],
-			'marker' => $messages[$i++]
+			
+			// Where in the code the bug is found
+			'errorText' => join("\n",$errorText)
 		);
 	}
 	return $info;
@@ -73,7 +87,7 @@ function outputLi($m, $type) {
 		$str .= '</a>';
 		$str .= '<p>' . $m['msg'] . '</p>';
 		$str .= '<small><pre>';
-			$str .= $m['lineText'] . "\n" . $m['marker'];
+			$str .= $m['errorText'];
 		$str .= '</pre></small>';
 	$str .= '</li>';
 	return $str;
