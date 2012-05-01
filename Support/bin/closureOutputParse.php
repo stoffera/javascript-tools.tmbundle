@@ -20,7 +20,8 @@ ul {
 
 $errors = $warnings = array();
 
-for ($i = 0; $i < count($messages); $i++) {
+// We start from 3, because the first 3 lines not are to be used in output
+for ($i = 3; $i < count($messages); $i++) {
 	if ($showWarnings) {
 		$info = match($messages, $i, 'WARNING');
 		if (!empty($info)) {
