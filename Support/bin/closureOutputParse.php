@@ -60,6 +60,8 @@ function match(&$messages, &$i, $type) {
 		while ($messages[$i++] != "") {
 			$errorText[] = $messages[$i];
 		}
+		$charNum = preg_match("/\^/", $errorText[count($errorText)-2], $charNumMatches, PREG_OFFSET_CAPTURE);
+		
 		$info = array(
 			// Path to the file
 			'path' => $matches[1],
@@ -74,7 +76,10 @@ function match(&$messages, &$i, $type) {
 			'msg' => $matches[4],
 			
 			// Where in the code the bug is found
-			'errorText' => join("\n",$errorText)
+			'errorText' => join("\n",$errorText),
+			
+			// Which charnum to set the cursor at
+			'charNo' => $charNum > 0 ? $charNumMatches[0][1] + 1 : 1
 		);
 	}
 	return $info;
@@ -82,7 +87,7 @@ function match(&$messages, &$i, $type) {
 
 function outputLi($m, $type) {
 	$str  = '<li class="' . strtolower($type) . '">';
-		$str .= '<a href="txmt://open?url=file://' . $m['path'] . '/' . $m['file'] . '&line=' . $m['lineNo'] . '">';
+		$str .= '<a href="txmt://open?url=file://' . $m['path'] . '/' . $m['file'] . '&line=' . $m['lineNo'] . '&column=' . $m['charNo'] . '" title="' . $m['path'] . '/' . $m['file'] . '">';
 			$str .= $type . ': ' . $m['file'] . ' - ' . $m['lineNo'];
 		$str .= '</a>';
 		$str .= '<p>' . $m['msg'] . '</p>';
