@@ -86,7 +86,7 @@ class CompileOutputPrinter {
 				}
 				
 				// Find the charnum to set the cursor at
-				$charNum = preg_match("/\^/", $errorText[count($errorText)-2], $charNumMatches, PREG_OFFSET_CAPTURE);
+				$charNum = preg_match("/\^/", $errorText[count($errorText)-1], $charNumMatches, PREG_OFFSET_CAPTURE);
 
 				$info = array(
 					// Path to the file
