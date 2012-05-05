@@ -81,8 +81,8 @@ class CompileOutputPrinter {
 
 				// The errorText is all the lines until next empty line
 				$errorText = array();;
-				while ($this->data[$this->i++] != "") {
-					$errorText[] = $this->data[$this->i];
+				while ($this->data[$this->i+1] != "") {
+					$errorText[] = $this->data[++$this->i];
 				}
 				
 				// Find the charnum to set the cursor at
