@@ -34,16 +34,17 @@ class CompileOutputPrinter {
 	 *
 	 * @param string $filename The name and path of the file to parse
 	 * @param boolean $showWarnings Whether warnings should be shown
+	 * @param string $currentFile The path to the current file in TM
 	 * @return void
 	 * @author Jesper Skytte Hansen
 	 */
-	public function run($filename, $showWarnings = false) {
+	public function run($filename, $currentFile, $showWarnings = false) {
 		$this->_loadContents($filename);
 		$types = array('ERROR');
 		if ($showWarnings) {
 			$types[] = 'WARNING';
 		}
-		$this->_parse($types);
+		$this->_parse($types, $currentFile);
 	}
 	
 	/**
@@ -61,10 +62,11 @@ class CompileOutputPrinter {
 	 * Parse the contents of the $this->data array and put content into the corresponding arrays
 	 *
 	 * @param array $types Array of types to parse for
+	 * @param string $currentFile The path to the current file in TM
 	 * @return void
 	 * @author Jesper Skytte Hansen
 	 */
-	private function _parse($types) {
+	private function _parse($types, $currentFile) {
 
 		// Change the types to regex structure
 		$types = join('|', $types);
@@ -108,7 +110,10 @@ class CompileOutputPrinter {
 					'errorText' => join("\n",$errorText),
 
 					// Which charnum to set the cursor at
-					'charNo' => $charNum > 0 ? $charNumMatches[0][1] + 1 : 1
+					'charNo' => $charNum > 0 ? $charNumMatches[0][1] + 1 : 1,
+					
+					//True if the file is the same as the active one in TM
+					'isCurrentTMFile' => (basename($currentFile) == $matches[2])?true:false
 				);
 				switch (strtolower($matches[4])) {
 					case 'warning':
@@ -150,9 +155,14 @@ class CompileOutputPrinter {
 			.error {
 				background-color: #CC8080;
 			}
+			.hidden {
+				display: none;
+			}
 			</style>";
 		
-		$d .= "<ul>";
+		$d .= "<label><input id='toggleBtn' type='checkbox' onclick='toggle()' checked></input> Only show issues in current file</label>";
+		
+		$d .= "<ul id='compileList'>";
 		
 		// First print the errors
 		if (!empty($this->errors)) {
@@ -169,6 +179,14 @@ class CompileOutputPrinter {
 		}
 		$d .= "</ul>";
 		
+		$d .= "<script>
+		function toggle() {
+			var list = document.getElementById('compileList');
+			for (var i in list.childNodes) {
+				if (!list.childNodes[i].classList.contains('currentFile')) list.childNodes[i].classList.toggle('hidden');
+			}
+		}
+		</script>";
 		// Return the HTML
 		return $d;
 	}
@@ -181,7 +199,7 @@ class CompileOutputPrinter {
 	 * @author Jesper Skytte Hansen
 	 */
 	private function _getLiHtml($m) {
-		$str  = '<li class="' . strtolower($m['type']) . '">';
+		$str  = '<li class="' . strtolower($m['type']) . ($m['isCurrentTMFile']?' currentFile':' hidden') . '">';
 			$str .= '<a href="txmt://open?url=file://' . $m['path'] . '/' . $m['file'] . '&line=' . $m['lineNo'] . '&column=' . $m['charNo'] . '" title="' . $m['path'] . '/' . $m['file'] . '">';
 				$str .= $m['type'] . ': ' . $m['file'] . ' - ' . $m['lineNo'];
 			$str .= '</a>';
@@ -195,6 +213,6 @@ class CompileOutputPrinter {
 }
 
 $class = new CompileOutputPrinter();
-$class->run($argv[1], $argc < 3);
+$class->run($argv[1], $argv[2], $argc < 4);
 print $class->output();
 ?>

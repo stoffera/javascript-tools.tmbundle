@@ -31,4 +31,4 @@ tail -n2 "$CLOSURE/goog/compile-bugs.txt"
 echo
 echo "Done"
 echo "</pre>"
-php "$TM_BUNDLE_SUPPORT/bin/closureOutputParse.php" "$CLOSURE/goog/compile-bugs.txt" $1
+php "$TM_BUNDLE_SUPPORT/bin/closureOutputParse.php" "$CLOSURE/goog/compile-bugs.txt" "$TM_FILEPATH" $1
