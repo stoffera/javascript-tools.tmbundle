@@ -23,6 +23,7 @@ function compile {
 	-f --jscomp_warning=const \
 	-f --jscomp_warning=checkTypes \
 	-f --jscomp_warning=accessControls \
+	-f --jscomp_warning=strictModuleDepCheck \
 	--output_file="$CLOSURE/goog/compiled.js" 2>&1 | cat > "$CLOSURE/goog/compile-bugs.txt"
 	find "$CLOSURE/goog/edulab" -exec cat "{}" \; 2>/dev/null | md5 > "$CLOSURE/goog/compile_chk.md5"
 }
@@ -48,6 +49,8 @@ if [ -a "$CLOSURE/goog/compile_chk.md5" ]
 else
 	compile
 fi
+SIZE=`du -sh "$CLOSURE/goog/compiled.js"`
+echo "Compiled JS size: ${SIZE:0:5}"
 tail -n1 "$CLOSURE/goog/compile-bugs.txt"
 echo "</pre>"
 php "$TM_BUNDLE_SUPPORT/bin/closureOutputParse.php" "$CLOSURE/goog/compile-bugs.txt" "$TM_FILEPATH" $1
