@@ -24,7 +24,7 @@ function compile {
 	-f --jscomp_warning=checkTypes \
 	-f --jscomp_warning=accessControls \
 	--output_file="$CLOSURE/goog/compiled.js" 2>&1 | cat > "$CLOSURE/goog/compile-bugs.txt"
-	find "$CLOSURE/goog/edulab" | xargs cat 2>/dev/null | md5 > "$CLOSURE/goog/compile_chk.md5"
+	find "$CLOSURE/goog/edulab" -exec cat "{}" \; 2>/dev/null | md5 > "$CLOSURE/goog/compile_chk.md5"
 }
 
 if [ -z "$CLOSURE" ]
@@ -37,11 +37,11 @@ echo "<pre>"
 if [ -a "$CLOSURE/goog/compile_chk.md5" ]
 	then
 	echo "Checking diff on source base..."
-	NEW_CHK=`find "$CLOSURE/goog/edulab" | xargs cat 2>/dev/null | md5`
+	NEW_CHK=`find "$CLOSURE/goog/edulab" -exec cat "{}" \; 2>/dev/null | md5`
 	OLD_CHK=`cat "$CLOSURE/goog/compile_chk.md5"`
 	if [ $NEW_CHK == $OLD_CHK ]
 		then
-		echo "Nothing changed."
+		echo "Nothing changed"
 	else
 		compile
 	fi
