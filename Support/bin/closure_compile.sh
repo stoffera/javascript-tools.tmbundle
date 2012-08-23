@@ -38,12 +38,14 @@ echo "<pre>"
 if [ -a "$CLOSURE/goog/compile_chk.md5" ]
 	then
 	echo "Checking diff on source base..."
-	NEW_CHK=`find "$CLOSURE/goog/edulab" -exec cat "{}" \; 2>/dev/null | md5`
+	NEW_CHK=`find "$CLOSURE/goog/edulab/" -name "*.js" -exec ls -l {} \; 2> /dev/null | awk '{print $6$7$8}' | md5`
 	OLD_CHK=`cat "$CLOSURE/goog/compile_chk.md5"`
+	echo "old md5: $OLD_CHK, new: $NEW_CHK"
 	if [ $NEW_CHK == $OLD_CHK ]
 		then
 		echo "Nothing changed"
 	else
+		echo $NEW_CHK > "$CLOSURE/goog/compile_chk.md5"
 		compile
 	fi
 else
